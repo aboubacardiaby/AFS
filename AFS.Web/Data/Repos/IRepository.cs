@@ -4,10 +4,14 @@ namespace AFS.Web.Data.Repos
 {
     public interface IRepository
     {
-        public void AddCustomer(Customer customer);
+         Task  AddCustomer(Customer customer);
+        Task<Customer> GetCustomerById(string id);
+        // Task<Customer> GetCustomerDa
 
+        Task<Customer> GetCustomerDetails(string customerid);
+         List<Customer> GetCustomers();
 
-        public List<Customer> GetCustomers();
+       Task<Loan> GetLoanInfobyCustomerAsync(string customerid);
         
     }
 }

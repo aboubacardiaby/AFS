@@ -4,12 +4,13 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Customer List</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
+<p style="text-align:right;margin-right:20px;">
+    <a class="btn btn-primary" asp-action="AddOrEdit">Create New</a>
 </p>
-<table class="table">
+<div class="table-responsive">
+    <table class="table">
     <thead>
         <tr>
             <th>
@@ -27,6 +28,10 @@
             <th>
                 @Html.DisplayNameFor(model => model.Phone)
             </th>
+                <th></th>
+                <th>Edit Action</th>
+                <th>Details Action</th>
+                <th> Loan Deatails</th>
             <th></th>
         </tr>
     </thead>
@@ -48,12 +53,18 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Phone)
             </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
+                    <td>
+                    <td class="text-center">
+                        <a asp-action="AddOrEdit" class="btn btn-primary" asp-route-CustomerId="@item.CustomerId">Edit</a>
+                    </td>
+                    <td class="text-center">
+                        <a asp-action="Details" class="btn btn-info" asp-route-CustomerId="@item.CustomerId">Details</a>
+                    </td>
+                   @* <td class="text-center">
+                        <a asp-action="Delete" class="btn btn-danger" asp-route-CustomerId="@item.CustomerId">Delete</a>
+                    </td>*@
         </tr>
 }
     </tbody>
 </table>
+</div>
