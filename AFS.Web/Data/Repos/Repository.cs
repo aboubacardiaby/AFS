@@ -1,5 +1,4 @@
 ﻿using AFS.Web.Data.Entities;
-using AFS.Web.Migrations;
 using AFS.Web.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -30,17 +29,18 @@ namespace AFS.Web.Data.Repos
 
             try
             {
-               
 
-                if (IsCustomerExist)
-                {
-                    _context.tblCustomer.Update(customerfromDb);
-                }
-                else
-                {
-                  await   _context.tblCustomer.AddAsync(customer);
-                }
-                await _context.SaveChangesAsync();
+               await   _context.Database.ExecuteSqlInterpolatedAsync($"Usp_AddOrEditCustomer  @CustId ={ customer.CustId}, @FirstName ={customer.FirstName}, @LastName ={customer.LastName}, @Genre= {customer.Genre},@Email ={customer.Email}, @PhoneNumber = {customer.PhoneNumber},@Address = {customer.Address},@Region ={customer.Region}, @NationalIdNumber = {customer.NationalIdNumber}, @JoinDate={customer.JoinDate}" );
+
+                //if (IsCustomerExist)
+                //{
+                //    _context.tblCustomer.Update(customerfromDb);
+                //}
+                //else
+                //{
+                //  await   _context.tblCustomer.AddAsync(customer);
+                //}
+                //await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -67,13 +67,15 @@ namespace AFS.Web.Data.Repos
         }
         public List<Customer> GetCustomers()
         {
+            var customers = _context?.tblCustomer?.FromSqlRaw<Customer>($"Usp_GetAllCustomer").ToList();
             return _context.tblCustomer.ToList();
         }
         #region Loan Repos
         public async Task<Loan> GetLoanInfobyCustomerAsync(string customerid)
         {
-            return _context.tblCustomer.
+            return null;
+            //return _context.tblCustomer.
         }
-        #region
+        #endregion
     }
 }

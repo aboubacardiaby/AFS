@@ -2,7 +2,9 @@
 using AFS.Web.Data.Repos;
 using AFS.Web.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 using NuGet.Protocol.Core.Types;
 
 namespace AFS.Web.Controllers
@@ -15,19 +17,30 @@ namespace AFS.Web.Controllers
         {
             this._repository = repository;
         }
+     
         public IActionResult Index()
         {
+            
+          
             var query = _repository.GetCustomers();
             var lists = new List<CustomerModel>();
             foreach (var item in query)
             {
-                lists.Add(new CustomerModel() { Address = item.Address, CustomerId = item.CustId, Firstname = item.FirstName, LastName = item.Name, Phone = item.PhoneNumber });
+                string Name = string.Format("{0}, {1}", item.FirstName, item.LastName);
+                lists.Add(new CustomerModel() { Address = item.Address, CustomerId = item.CustId, Name =  Name, Phone = item.PhoneNumber });
             }
             return View(lists);
         }
 
         public async Task<IActionResult> AddOrEdit(string? customerid)
         {
+            List<SelectListItem> values = new()
+            {
+                new SelectListItem { Value = "Male", Text = "Male" },
+                new SelectListItem { Value = "Female", Text = "Female" }
+            };
+            ViewBag.data = values.ToList();
+
             ViewBag.PageName = customerid == null ? "Create Customder" : "Edit Customer";
             ViewBag.IsEdit = customerid == null ? false : true;
             if (customerid == null)
@@ -42,6 +55,7 @@ namespace AFS.Web.Controllers
                 {
                     return NotFound();
                 }
+#pragma warning disable CS8601 // Possible null reference assignment.
                 var model = new CustomerModel()
                 {
                     Address = customer.Address,
@@ -51,15 +65,16 @@ namespace AFS.Web.Controllers
                     LastName = "",
                     Phone = customer.PhoneNumber
                 };
+#pragma warning restore CS8601 // Possible null reference assignment.
                 return View(model);
             }
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddOrEdit(  string customerid, [Bind("CustomerId,Firstname,Lastname,LastName, Address, Phone,NationalIdNumber")] CustomerModel model)
+        public async Task<IActionResult> AddOrEdit(  string customerid, [Bind("CustomerId,Firstname,LastName, Address, Phone,Genre, Region, joinDate, NationalIdNumber")] CustomerModel model)
         {
 
-            model.CustomerId = "new";
+           
 
 
             if ( model.NationalIdNumber != null)
@@ -69,13 +84,14 @@ namespace AFS.Web.Controllers
                     CustId = model.NationalIdNumber,
                     FirstName = model.Firstname,
                     Address = model.Address,
-                    Name = string.Format("{0}, {1}", model.Firstname, model.LastName),
+                    LastName = model.LastName,
+                    Genre = model.Genre,
+                    Email = model.Email,
+                    Region = model.Region,                 
                     PhoneNumber = model.Phone,
                     NationalIdNumber = model.NationalIdNumber,
-                    CreatedDate = DateTime.Now,
-                    CreateUser= "ab.diaby",
-                    UpdateDate = DateTime.Now,
-                    UpdateUser = "ab.diaby"
+                    JoinDate = DateTime.Now,
+                    
 
                 };
                 await _repository.AddCustomer(newcustomer);

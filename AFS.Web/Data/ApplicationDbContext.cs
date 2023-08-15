@@ -12,7 +12,7 @@ namespace AFS.Web.Data
         {
               
         }
-
+      
         public DbSet<Customer> tblCustomer { get; set; }
         public DbSet<Loan> tblLoan { get; set; }
         public DbSet<Payment> tblPayment { get; set; }
