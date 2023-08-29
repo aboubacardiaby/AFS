@@ -62,7 +62,11 @@ namespace AFS.Web.Controllers
                     CustomerId = customer.CustId,
                     NationalIdNumber = customer.NationalIdNumber,
                     Firstname = customer.FirstName,
-                    LastName = "",
+                    LastName = customer.LastName,
+                    Region = customer.Region,
+                    Email = customer.Email,
+                    Genre = customer.Genre,
+                    JoinDate = Convert.ToDateTime( customer.JoinDate),
                     Phone = customer.PhoneNumber
                 };
 #pragma warning restore CS8601 // Possible null reference assignment.
@@ -119,7 +123,11 @@ namespace AFS.Web.Controllers
                 CustomerId = customerId,
                 NationalIdNumber = customer.NationalIdNumber,
                 Firstname = customer.FirstName,
-                LastName = "",
+                LastName = customer.LastName,
+                JoinDate=  Convert.ToDateTime(customer.JoinDate),
+                Email = customer.Email,
+                Genre = customer.Genre,
+                Region = customer.Region,
                 Phone = customer.PhoneNumber
             };
             return View(model);
