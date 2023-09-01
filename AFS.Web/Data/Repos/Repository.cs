@@ -1,5 +1,4 @@
 ﻿using AFS.Web.Data.Entities;
-using AFS.Web.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace AFS.Web.Data.Repos
@@ -30,7 +29,7 @@ namespace AFS.Web.Data.Repos
             try
             {
 
-               await   _context.Database.ExecuteSqlInterpolatedAsync($"Usp_AddOrEditCustomer  @CustId ={ customer.CustId}, @FirstName ={customer.FirstName}, @LastName ={customer.LastName}, @Genre= {customer.Genre},@Email ={customer.Email}, @PhoneNumber = {customer.PhoneNumber},@Address = {customer.Address},@Region ={customer.Region}, @NationalIdNumber = {customer.NationalIdNumber}, @JoinDate={customer.JoinDate}" );
+                await _context.Database.ExecuteSqlInterpolatedAsync($"Usp_AddOrEditCustomer  @CustId ={customer.CustId}, @FirstName ={customer.FirstName}, @LastName ={customer.LastName}, @Genre= {customer.Genre},@Email ={customer.Email}, @PhoneNumber = {customer.PhoneNumber},@Address = {customer.Address},@Region ={customer.Region}, @NationalIdNumber = {customer.NationalIdNumber}, @JoinDate={customer.JoinDate}");
 
                 //if (IsCustomerExist)
                 //{
@@ -46,12 +45,12 @@ namespace AFS.Web.Data.Repos
             {
                 throw;
             }
-          
+
         }
 
         public async Task<Customer> GetCustomerById(string customerid)
         {
-         
+
             var customer = await _context.tblCustomer.FindAsync(customerid);
             return customer;
         }

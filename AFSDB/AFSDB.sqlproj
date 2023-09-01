@@ -63,6 +63,7 @@
     <Build Include="TblPayment.sql" />
     <Build Include="TblEmployee.sql" />
     <Build Include="Usp_AddOrEditCustomer.sql" />
+    <Build Include="Usp_GetAllCustomer.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="AFSDB.refactorlog" />
