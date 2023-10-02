@@ -1,49 +1,50 @@
 pipeline {
+    agent { label 'master' }
+   
+	environment {
+		registry = "adiaby2609/afs"
+		img = "$registry" + ":${env.BUILD_ID}"
+		registryCredential = 'dockerhub-credentials' 
+    }	
 
-  environment {
-    dockerimagename = ""diaby2609/afs
-    dockerImage = ""
-  }
-
-  agent any
-
-  stages {
-
-    stage('Checkout Source') {
-      steps {
-        git 'https://github.com/aboubacardiaby/AFS.git'
-      }
-    }
-
-    stage('Build image') {
-      steps{
-        script {
-          dockerImage = docker.build dockerimagename
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'dotnetwebapp', url: 'https://github.com/aboubacardiaby/AFS.git'
+                sh 'ls -la'
+            }
         }
-      }
-    }
-
-    stage('Pushing Image') {
-      environment {
-               registryCredential = 'dockerhub-credentials'
-           }
-      steps{
-        script {
-          docker.withRegistry( 'https://registry.hub.docker.com', registryCredential ) {
-            dockerImage.push("latest")
-          }
+		stage('Stop running Container') {
+			steps{
+					sh returnStatus: true, script: 'docker stop $(docker ps -a | grep ${JOB_NAME} | awk \'{print $1}\')'
+					sh returnStatus: true, script: 'docker rmi $(docker images | grep ${registry} | awk \'{print $3}\') --force' 
+					sh returnStatus: true, script: 'docker rm ${JOB_NAME}'
+				}	
+		}
+        stage('Build') {
+            steps {
+				echo "Building our image"
+				script {
+					dockerImg = docker.build("${img}")
+                }
+            }
         }
-      }
-    }
-
-    stage('Deploying AFS container to Kubernetes') {
-      steps {
-        script {
-          kubernetesDeploy(configs: "deployment.yaml", "service.yaml")
+		stage('Run') {
+			steps{
+				echo "Run image"
+				sh returnStdout: true, script: "docker run --rm -d --name ${JOB_NAME} -p 8081:5000 ${img}"
+			}
+		}
+		stage('Release') {
+            steps {
+				script {
+					echo "Push to docker hub"
+                    docker.withRegistry( 'https://registry.hub.docker.com ', registryCredential )  {
+							dockerImg.push()
+							dockerImg.push('latest') //one more push for latest tag
+						}
+                }
+            }
         }
-      }
     }
-
-  }
-
 }
