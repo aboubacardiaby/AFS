@@ -1,5 +1,5 @@
 pipeline {
-    agent { label 'master' }
+    
    
 	environment {
 		registry = "adiaby2609/afs"
