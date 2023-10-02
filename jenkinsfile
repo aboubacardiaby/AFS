@@ -1,6 +1,5 @@
-pipeline {
-    
-   
+pipeline {    
+    agent any
 	environment {
 		registry = "adiaby2609/afs"
 		img = "$registry" + ":${env.BUILD_ID}"
@@ -10,7 +9,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'dotnetwebapp', url: 'https://github.com/aboubacardiaby/AFS.git'
+                git branch: 'develop', url: 'https://github.com/aboubacardiaby/AFS.git'
                 sh 'ls -la'
             }
         }
