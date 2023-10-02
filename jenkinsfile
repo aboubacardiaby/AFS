@@ -4,7 +4,7 @@ pipeline {
 	environment {
 		registry = "adiaby2609/afs"
 		img = "$registry" + ":${env.BUILD_ID}"
-		registryCredential = 'dockerhub-credentials'
+		registryCredential = 'dockerhub-credentials' 
     }	
 
     stages {
