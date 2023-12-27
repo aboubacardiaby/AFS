@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: afs
-        image: adiaby2609/afs
+        image: adiaby2609/afs:latest
         resources:
           limits:
             memory: "128Mi"
