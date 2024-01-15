@@ -1,11 +1,7 @@
-﻿using AFS.Web.Data.Entities;
-using AFS.Web.Data.Repos;
+﻿using AFS.Web.Data.Repos;
 using AFS.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json.Linq;
-using NuGet.Protocol.Core.Types;
 
 namespace AFS.Web.Controllers
 {
@@ -17,17 +13,15 @@ namespace AFS.Web.Controllers
         {
             this._repository = repository;
         }
-     
+
         public IActionResult Index()
         {
-            
-          
             var query = _repository.GetCustomers();
             var lists = new List<CustomerModel>();
             foreach (var item in query)
             {
                 string Name = string.Format("{0}, {1}", item.FirstName, item.LastName);
-                lists.Add(new CustomerModel() { Address = item.Address, CustomerId = item.CustId, Name =  Name, Phone = item.PhoneNumber });
+                lists.Add(new CustomerModel() { Address = item.Address, CustomerId = item.CustId, Name = Name, Phone = item.PhoneNumber });
             }
             return View(lists);
         }
@@ -49,7 +43,7 @@ namespace AFS.Web.Controllers
             }
             else
             {
-               var customer = await _repository.GetCustomerById(customerid);
+                var customer = await _repository.GetCustomerById(customerid);
 
                 if (customer == null)
                 {
@@ -66,42 +60,46 @@ namespace AFS.Web.Controllers
                     Region = customer.Region,
                     Email = customer.Email,
                     Genre = customer.Genre,
-                    JoinDate = Convert.ToDateTime( customer.JoinDate),
+                    JoinDate = Convert.ToDateTime(customer.JoinDate),
                     Phone = customer.PhoneNumber
                 };
 #pragma warning restore CS8601 // Possible null reference assignment.
                 return View(model);
             }
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddOrEdit(  string customerid, [Bind("CustomerId,Firstname,LastName, Address, Phone,Genre, Region, joinDate, NationalIdNumber")] CustomerModel model)
+        public async Task<IActionResult> AddOrEdit(string customerid, [Bind("CustomerId,Firstname,LastName, Address, Phone,Genre, Region, joinDate, NationalIdNumber")] CustomerModel model)
         {
-
-           
-
-
-            if ( model.NationalIdNumber != null)
+            try
             {
-                var newcustomer = new Data.Entities.Customer()
+                if (model.NationalIdNumber != null)
                 {
-                    CustId = model.NationalIdNumber,
-                    FirstName = model.Firstname,
-                    Address = model.Address,
-                    LastName = model.LastName,
-                    Genre = model.Genre,
-                    Email = model.Email,
-                    Region = model.Region,                 
-                    PhoneNumber = model.Phone,
-                    NationalIdNumber = model.NationalIdNumber,
-                    JoinDate = DateTime.Now,
-                    
+                    var newcustomer = new Data.Entities.Customer()
+                    {
+                        CustId = model.NationalIdNumber,
+                        FirstName = model.Firstname,
+                        Address = model.Address,
+                        LastName = model.LastName,
+                        Genre = model.Genre,
+                        Email = model.Email,
+                        City = model.City ?? "BP",
+                        Region = model.Region,
+                        PhoneNumber = model.Phone,
+                        NationalIdNumber = model.NationalIdNumber,
+                        JoinDate = DateTime.Now,
+                        CreateDate = DateTime.Now,
+                        CreatedBy = "test1"
+                    };
+                    await _repository.AddCustomer(newcustomer);
 
-                };
-                await _repository.AddCustomer(newcustomer);
-
-
-                return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            catch (Exception exec)
+            {
+                throw;
             }
             return View(new CustomerModel());
         }
@@ -112,7 +110,7 @@ namespace AFS.Web.Controllers
             {
                 return NotFound();
             }
-            var customer = await  _repository.GetCustomerDetails(customerId);
+            var customer = await _repository.GetCustomerDetails(customerId);
             if (customer == null)
             {
                 return NotFound();
@@ -124,7 +122,7 @@ namespace AFS.Web.Controllers
                 NationalIdNumber = customer.NationalIdNumber,
                 Firstname = customer.FirstName,
                 LastName = customer.LastName,
-                JoinDate=  Convert.ToDateTime(customer.JoinDate),
+                JoinDate = Convert.ToDateTime(customer.JoinDate),
                 Email = customer.Email,
                 Genre = customer.Genre,
                 Region = customer.Region,
@@ -133,5 +131,34 @@ namespace AFS.Web.Controllers
             return View(model);
         }
 
+        public async Task<IActionResult> LoanApp()
+        {
+            List<SelectListItem> values = new()
+            {
+                new SelectListItem { Value = "Male", Text = "Male" },
+                new SelectListItem { Value = "Female", Text = "Female" }
+            };
+            ViewBag.data = values.ToList();
+
+            List<SelectListItem> regions = new()
+            {
+                new SelectListItem { Value = "Dakar", Text = "Dakar" },
+                new SelectListItem { Value = "Saint louis", Text = "Saint Louis" },
+                 new SelectListItem { Value = "Diourbel", Text = "Diourbel" },
+                new SelectListItem { Value = "Fatick", Text = "Fatick" },
+                 new SelectListItem { Value = "Kolda", Text = "Kolda" },
+                new SelectListItem { Value = "Tamba", Text = "Tamba" },
+                 new SelectListItem { Value = "Kaolack", Text = "Kaolack" },
+                new SelectListItem { Value = "Louga", Text = "Louga" },
+                 new SelectListItem { Value = "Sedhiou", Text = "Sedhiou" },
+                new SelectListItem { Value = "Matam", Text = "Matam" },
+                 new SelectListItem { Value = "Ziguinchor", Text = "Ziguinchor" },
+                new SelectListItem { Value = "Thies", Text = "Thies" },
+                new SelectListItem { Value = "Kaffrine", Text = "Kaffrine" },
+                new SelectListItem { Value = "Kedougou", Text = "Kedougou" }
+            };
+            ViewBag.regions = regions.ToList();
+            return View(new LoanApplicationViewModel());
+        }
     }
 }

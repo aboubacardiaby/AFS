@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  afs.web:
+    image: ${DOCKER_REGISTRY-}afsweb
+    build:
+      context: .
+      dockerfile: AFS.Web/Dockerfile
