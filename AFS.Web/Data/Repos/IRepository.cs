@@ -1,10 +1,13 @@
 ﻿using AFS.Web.Data.Entities;
+using AFS.Web.Models;
 
 namespace AFS.Web.Data.Repos
 {
     public interface IRepository
     {
          Task  AddCustomer(Customer customer);
+
+        Task CreateLoanApplication(LoanApplicationViewModel customer);
         Task<Customer> GetCustomerById(string id);
         // Task<Customer> GetCustomerDa
 

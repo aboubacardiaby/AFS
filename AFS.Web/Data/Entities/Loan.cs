@@ -6,7 +6,8 @@
         public string LoanName { get; set; }
         public string LoanType { get; set; }
         public string LoanAmount { get; set; }
-        // public int MyProperty { get; set; }
+        public Customer Customer { get; set; }
+        public string CustId { get; set; }
         private ICollection<Payment> Payments { get; set; }
 
     }

@@ -6,6 +6,7 @@ namespace AFS.Web.Models
 {
     public class LoanApplicationViewModel
     {
+        public string CustId { get; set; }
         [Required]
         [DisplayName("Primary Officer")]
         public string PrimaryOfficer { get; set; }
@@ -65,6 +66,7 @@ namespace AFS.Web.Models
         [Required]
         [DisplayName("Term")]
         public string Term { get; set; }
+        public string Loanstatus { get; set; }
 
         public List<string> GenreOptions()
         {

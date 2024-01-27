@@ -17,7 +17,7 @@ namespace AFS.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var employees = await _context.Employees.ToListAsync();
+            var employees = await _context.Tblemployee.ToListAsync();
             return View(employees);
         }
 
@@ -32,7 +32,7 @@ namespace AFS.Web.Controllers
             }
             else
             {
-                var employee = await _context.Employees.FindAsync(employeeId);
+                var employee = await _context.Tblemployee.FindAsync(employeeId);
 
                 if (employee == null)
                 {
@@ -49,8 +49,8 @@ namespace AFS.Web.Controllers
         Employee employeeData)
         {
             bool IsEmployeeExist = false;
-
-            Employee employee = await _context.Employees.FindAsync(employeeId);
+            employeeId = 145;
+            Employee employee = await _context.Tblemployee.FindAsync(employeeId);
 
             if (employee != null)
             {
@@ -65,6 +65,7 @@ namespace AFS.Web.Controllers
             {
                 try
                 {
+                    employee.EmployeeId = 145;
                     employee.Name = employeeData.Name;
                     employee.Designation = employeeData.Designation;
                     employee.Address = employeeData.Address;
@@ -97,7 +98,7 @@ namespace AFS.Web.Controllers
             {
                 return NotFound();
             }
-            var employee = await _context.Employees.FirstOrDefaultAsync(m => m.EmployeeId == employeeId);
+            var employee = await _context.Tblemployee.FirstOrDefaultAsync(m => m.EmployeeId == employeeId);
             if (employee == null)
             {
                 return NotFound();
@@ -112,7 +113,7 @@ namespace AFS.Web.Controllers
             {
                 return NotFound();
             }
-            var employee = await _context.Employees.FirstOrDefaultAsync(m => m.EmployeeId == employeeId);
+            var employee = await _context.Tblemployee.FirstOrDefaultAsync(m => m.EmployeeId == employeeId);
 
             if (employee == null)
             {
@@ -127,8 +128,8 @@ namespace AFS.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int employeeId)
         {
-            var employee = await _context.Employees.FindAsync(employeeId);
-            _context.Employees.Remove(employee);
+            var employee = await _context.Tblemployee.FindAsync(employeeId);
+            _context.Tblemployee.Remove(employee);
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));

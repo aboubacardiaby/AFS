@@ -160,5 +160,29 @@ namespace AFS.Web.Controllers
             ViewBag.regions = regions.ToList();
             return View(new LoanApplicationViewModel());
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> LoanApp(string customerid, [Bind("PrimaryOfficer,PreparedBy,FirstName,LastName, Address,Village, Telephone,Departement,Genre, Email,Region, joinDate, NationalIdNumber,CurrentBusiness,BusinessPurpose,Amount,Term")] LoanApplicationViewModel model)
+        {
+            try
+            {
+                model.NationalIdNumber = "4511";
+                model.Loanstatus = "new";
+               
+                if (model.NationalIdNumber != null)
+                { 
+                   
+                    await _repository.CreateLoanApplication(model);
+
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            catch (Exception exec)
+            {
+                throw;
+            }
+            return View(new CustomerModel());
+        }
+
     }
 }

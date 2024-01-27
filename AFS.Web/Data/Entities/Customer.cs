@@ -28,5 +28,6 @@ namespace AFS.Web.Data.Entities
 
         public string? NationalIdNumber { get; set; }
         public ICollection<Loan> Loans { get; set; }
+        public ICollection<LoanApplication> LoanApplications { get; set; }
     }
 }

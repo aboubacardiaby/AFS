@@ -18,6 +18,12 @@ ViewData["Title"] = "LoanApp";
         color: green
     }
 </style>
+<script>
+    $(function () {
+        $("#datepicker").datepicker();        
+
+    });
+</script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 <link rel="stylesheet" href="/resources/demos/style.css">
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
@@ -68,7 +74,7 @@ ViewData["Title"] = "LoanApp";
                     <div class="row">
                         <div class="col-md-6 mb-6">
                             <label asp-for="DatePrepared" class=" control-label required"></label>
-                            <input asp-for="DatePrepared" class="form-control" />
+                            <input asp-for="DatePrepared" id="datepicker" class="form-control" />
                             <span asp-validation-for="DatePrepared" class="text-danger"></span>
                         </div>
                         <div class="col-md-6 mb-6">
@@ -83,7 +89,7 @@ ViewData["Title"] = "LoanApp";
                     <div class="row">
                         <div class="col-md-6 mb-6">
                             <label asp-for="FirstName" class=" control-label required"></label>
-                            <input asp-for="FirstName" class="form-control" />
+                    <input asp-for="FirstName" class="form-control" />
                             <span asp-validation-for="FirstName" class="text-danger"></span>
                         </div>
                         <div class="col-md-6 mb-6">
@@ -124,7 +130,7 @@ ViewData["Title"] = "LoanApp";
                         </div>
                         <div class="col-md-6 mb-6">
                             <label class=" control-label required"> Select Region</label>
-                            <select name="Genre" class="form-control" asp-items="@ViewBag.regions"></select>
+                            <select name="Region" class="form-control" asp-items="@ViewBag.regions"></select>
                             <span asp-validation-for="Region" class="text-danger"></span>
                         </div>
                     </div>
