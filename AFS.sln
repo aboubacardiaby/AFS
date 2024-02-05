@@ -11,8 +11,7 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "AFSDB", "AFSDB\AFSDB.sqlpro
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{32BA9388-E64F-41E2-A231-034D95BEC084}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AFSDB.Tests", "..\AFSDB.Tests\AFSDB.Tests.csproj", "{3AC91AC7-D041-47D7-BC0B-5CF4223C8024}"
-EndProject
+
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
